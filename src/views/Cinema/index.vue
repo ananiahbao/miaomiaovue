@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-        <Header />
+        <Header title="我的影院"/>
         <Footer />
     </div>
 </template>

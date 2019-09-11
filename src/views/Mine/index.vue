@@ -1,6 +1,6 @@
 <template>
     <div id="main">
-        <Header />
+        <Header title="我的喵喵"/>
         <Footer />
     </div>
 </template>
