@@ -1,61 +1,39 @@
 <template>
     <div class="movie_body">
         <ul>
-            <li>
-                <div class="pic_show"><img src="/image/movie_1.jpg" alt=""></div>
+            <li v-for="item in comingList" :key="item.id" >
+                <div class="pic_show"><img :src="item.img | setWH('128.180')" alt=""></div>
                 <div class="info_list">
-                    <p>无名之辈</p>
-                    <p><span class="persom">17746</span> 人想看</p>
-                    <p>主演：陈建斌，任素喜，潘炳龙</p>
-                    <p>2018-11-30上映</p>
+                    <p>{{ item.nm }} <img v-if="item.version" src="@/assets/maxs.png" alt=""></p>
+                    <p><span class="persom">{{ item.wish }}</span> 人想看</p>
+                    <p>主演：{{ item.star }}</p>
+                    <p>{{ item.rt }}上映</p>
                 </div>
                 <div class="btn_pre">
                     预售
                 </div>
             </li>
-            <li>
-                <div class="pic_show"><img src="/image/movie_1.jpg" alt=""></div>
-                <div class="info_list">
-                    <p>无名之辈</p>
-                    <p><span class="persom">17746</span> 人想看</p>
-                    <p>主演：陈建斌，任素喜，潘炳龙</p>
-                    <p>2018-11-30上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/image/movie_1.jpg" alt=""></div>
-                <div class="info_list">
-                    <p>无名之辈</p>
-                    <p><span class="persom">17746</span> 人想看</p>
-                    <p>主演：陈建斌，任素喜，潘炳龙</p>
-                    <p>2018-11-30上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
-            <li>
-                <div class="pic_show"><img src="/image/movie_1.jpg" alt=""></div>
-                <div class="info_list">
-                    <p>无名之辈</p>
-                    <p><span class="persom">17746</span> 人想看</p>
-                    <p>主演：陈建斌，任素喜，潘炳龙</p>
-                    <p>2018-11-30上映</p>
-                </div>
-                <div class="btn_pre">
-                    预售
-                </div>
-            </li>
+            
         </ul>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'comminSoon'
+    name: 'comminSoon',
+    data(){
+        return {
+            comingList :[]
+        }
+    },
+    mounted(){
+        this.axios.get('/api/movieComingList?cityId=10').then((res) => {
+            var msg = res.data.msg;
+            if(msg === 'ok'){
+                this.comingList = res.data.data.comingList;
+            }
+        })
+    }
 }
 </script>
 
