@@ -1,69 +1,31 @@
 <template>
     <div class="city_body">
-        <!-- <div class="city_list">
-            <div class="city_hot">
-                <h2>热门城市</h2>
-                <ul class="clearfix">
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                    <li>上海</li>
-                    <li>北京</li>
-                </ul>
-            </div>
-            <div class="city_sort">
-                <div>
-                    <h2>A</h2>
-                    <ul>
-                        <li>阿拉善</li>
-                        <li>鞍山</li>
-                        <li>安庆</li>
-                        <li>安阳</li>
-                    </ul>
-                </div>
-                <div>
-                        <h2>B</h2>
-                    <ul>
-                        <li>阿拉善</li>
-                        <li>鞍山</li>
-                        <li>安庆</li>
-                        <li>安阳</li>
-                    </ul>
+        <Loading v-if="isLoading" />
+        <!-- 有两个子节点时 给需要滚动的子节点多包一层div即可 -->
+        <Scroller v-else ref="city_List">
+            <div>
+                <div class="city_list">
+                    <div class="city_hot">
+                        <h2>热门城市</h2>
+                        <ul class="clearfix">
+                            <li v-for="item in hotList" :key="item.id">
+                                {{ item.nm }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="city_sort" ref="city_sort">
+                        <div v-for="item in cityList" :key="item.index">
+                            <h2>{{ item.index }}</h2>
+                            <ul>
+                                <li v-for="itemList in item.list" :key="itemList.id">
+                                    {{ itemList.nm }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="city_index">
-            <ul>
-                <li>A</li>
-                <li>B</li>
-                <li>C</li>
-                <li>D</li>
-                <li>E</li>
-            </ul>
-        </div> -->
-        <div class="city_list">
-            <div class="city_hot">
-                <h2>热门城市</h2>
-                <ul class="clearfix">
-                    <li v-for="item in hotList" :key="item.id">
-                        {{ item.nm }}
-                    </li>
-                </ul>
-            </div>
-            <div class="city_sort" ref="city_sort">
-                <div v-for="item in cityList" :key="item.index">
-                    <h2>{{ item.index }}</h2>
-                    <ul>
-                        <li v-for="itemList in item.list" :key="itemList.id">
-                            {{ itemList.nm }}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        </Scroller>
         <div class="city_index">
             <ul>
                 <li v-for="(item,index) in cityList" :key="item.index" @touchstart="handleToIndex(index)">
@@ -80,7 +42,8 @@
         data(){
             return {
                 cityList : [],
-                hotList : []
+                hotList : [],
+                isLoading : true
             }
         },
         mounted() {
@@ -89,10 +52,11 @@
                 var msg = res.data.msg;
                 if(msg === 'ok'){
                     var cities = res.data.data.cities;
+                    this.isLoading = false;
                     // [ { index: 'A', list : [ {nm : '啊陈', id : 123} ]} ]
-                   var { cityList, hotList } =  this.formatcityList(cities);
-                   this.cityList = cityList;
-                   this.hotList = hotList;
+                    var { cityList, hotList } =  this.formatcityList(cities);
+                    this.cityList = cityList;
+                    this.hotList = hotList;
                 }
             });
         },
@@ -149,7 +113,8 @@
             },
             handleToIndex(index){
                 var h2 = this.$refs.city_sort.getElementsByTagName('h2');
-                this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop;
+                // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop;
+                this.$refs.city_List.toScrollTop(-h2[index].offsetTop);
             }
         }
     }

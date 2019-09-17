@@ -11,7 +11,13 @@ Vue.config.productionTip = false
 Vue.filter('setWH',(url,arg) =>{
   return url.replace(/w\.h/,arg);
 });
+// scroller全局组件
+import Scroller from '@/components/Scroller/Scroller.vue'
+Vue.component('Scroller',Scroller);
 
+// loading 组件全局注册
+import Loading from '@/components/Loading/Loading.vue'
+Vue.component('Loading',Loading);
 new Vue({
   router,
   store,
