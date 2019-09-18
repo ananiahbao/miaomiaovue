@@ -8,7 +8,7 @@
                     <div class="city_hot">
                         <h2>热门城市</h2>
                         <ul class="clearfix">
-                            <li v-for="item in hotList" :key="item.id">
+                            <li v-for="item in hotList" :key="item.id" @tap="handleTocity(item.nm,item.id)">
                                 {{ item.nm }}
                             </li>
                         </ul>
@@ -17,7 +17,7 @@
                         <div v-for="item in cityList" :key="item.index">
                             <h2>{{ item.index }}</h2>
                             <ul>
-                                <li v-for="itemList in item.list" :key="itemList.id">
+                                <li v-for="itemList in item.list" :key="itemList.id"  @tap="handleTocity(itemList.nm,itemList.id)">
                                     {{ itemList.nm }}
                                 </li>
                             </ul>
@@ -47,7 +47,17 @@
             }
         },
         mounted() {
-            this.axios.get('/api/cityList').then((res)=>{
+            
+            // 取出本地存储
+            var cityList = window.localStorage.getItem('clitList');
+            var hotList = window.localStorage.getItem('hotList');
+            //本地存储存在
+            if(cityList && hotList){
+                this.cityList = JSON.parse(cityList);
+                this.hotList = JSON.parse(hotList);
+                this.isLoading = false;
+            }else{
+                this.axios.get('/api/cityList').then((res)=>{
                 // console.log(res.data.data.cities);
                 var msg = res.data.msg;
                 if(msg === 'ok'){
@@ -57,8 +67,12 @@
                     var { cityList, hotList } =  this.formatcityList(cities);
                     this.cityList = cityList;
                     this.hotList = hotList;
+                    // 本地存储
+                    window.localStorage.setItem('clitList',JSON.stringify(cityList));
+                    window.localStorage.setItem('hotList',JSON.stringify(hotList));
                 }
             });
+            }
         },
         methods:{
             formatcityList(cities){
@@ -115,6 +129,15 @@
                 var h2 = this.$refs.city_sort.getElementsByTagName('h2');
                 // this.$refs.city_sort.parentNode.scrollTop = h2[index].offsetTop;
                 this.$refs.city_List.toScrollTop(-h2[index].offsetTop);
+            },
+            handleTocity(nm,id){
+                //修改状态管理 用vue插件可以看到状态
+                this.$store.commit('city/CITY_INFO',{ nm, id });
+                window.localStorage.setItem('nowNm',nm);
+                window.localStorage.setItem('nowId',id);
+                //编程式路由
+                this.$router.push('/movie/nowPlaying');
+
             }
         }
     }

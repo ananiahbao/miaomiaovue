@@ -33,16 +33,26 @@
             return {
                 movieList : [],
                 pullDownMsg : '',
-                isLoading : true
+                isLoading : true,
+                // 上一次的城市id
+                prevCityId : -1
             }
         },
-        mounted(){
-            this.axios.get('/api/movieOnInfoList?cityId=10').then((res) => {
+        activated(){
+            // 存储上一次的prevCityId
+            var cityId = this.$store.state.city.id;
+            if( this.prevCityId === cityId ){return;}
+            this.isLoading = true;
+            console.log(123)
+            this.axios.get('/api/movieOnInfoList?cityId=' + cityId).then((res) => {
                 var msg = res.data.msg;
                 console.log(res.data)
                 if(msg === 'ok'){
                     this.movieList = res.data.data.movieList;
                     this.isLoading = false;
+                    // prevCityId
+                    this.prevCityId = cityId;
+
                     // 页面渲染完毕触发这个方法的回调
                     // this.$nextTick(() =>{
                     //     //接收两个参数 1.找到最外层包裹的容器 dom元素 2.配置元素 true 开启配置

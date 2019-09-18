@@ -12,7 +12,6 @@
 import Header from '@/components/Header/Header.vue';
 import Footer from '@/components/Footer/Footer.vue';
 import Login from '@/components/Login/Login.vue';
-
     export default {
         name: 'Mine',
         components:{
