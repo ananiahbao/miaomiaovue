@@ -7,7 +7,8 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // base: process.env.BASE_URL, 根目录
+    base: 'miaomiao',
   routes: [
     movieRouter,
     mineRouter,

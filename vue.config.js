@@ -1,4 +1,6 @@
 module.exports =  {
+    // 将所有的静态文件都放在miaomiao文件夹下
+    publicPath : '/miaomiao',
     devServer : {
         proxy : {
             '/api' : {
