@@ -19,6 +19,7 @@
             </keep-alive>
         </div>
         <Footer />
+        <router-view name="detail" />
     
     </div>
 </template>
@@ -56,7 +57,7 @@ import { messageBox } from '@/components/JS';
                         });
                     }
                 });
-            },3000);
+            },2000);
         
         }
     }
